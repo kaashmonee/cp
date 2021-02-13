@@ -1,0 +1,70 @@
+import sys
+# problem a
+# template by:
+# https://github.com/rajatg98
+
+'''input
+
+'''
+import sys
+import math
+import bisect
+from sys import stdin,stdout
+from math import gcd,floor,sqrt,log
+from collections import defaultdict as dd
+from bisect import bisect_left as bl,bisect_right as br
+
+sys.setrecursionlimit(100000000)
+
+inp    =lambda: int(input())
+strng  =lambda: input().strip()
+jn     =lambda x,l: x.join(map(str,l))
+strl   =lambda: list(input().strip())
+mul    =lambda: map(int,input().strip().split())
+mulf   =lambda: map(float,input().strip().split())
+seq    =lambda: list(map(int,input().strip().split()))
+
+ceil   =lambda x: int(x) if(x==int(x)) else int(x)+1
+ceildiv=lambda x,d: x//d if(x%d==0) else x//d+1
+
+flush  =lambda: stdout.flush()
+stdstr =lambda: stdin.readline()
+stdint =lambda: int(stdin.readline())
+stdpr  =lambda x: stdout.write(str(x))
+
+mod=1000000007
+
+#main code
+
+def solve():
+    a, b = mul()
+
+    if a == b:
+        output = 2
+
+    elif b == 1:
+        output = int(math.log(a, b+1))
+        if output - int(math.log(a, b+2)) >= 2:
+        # print(int(math.log(a, b+2)) - output)
+            output = int(math.log(a, b+2)) + 2
+        # output += 1
+    else:
+        output = int(math.log(a, b))
+        output += 1
+        if output - int(math.log(a, b+1)) >= 2:
+            print(int(math.log(a, b+1)) - output)
+            output = int(math.log(a, b+1)) + 2
+
+    print(output)
+
+
+def main():
+
+    tests = inp()
+
+    for _ in range(tests):
+        solve()
+
+
+if __name__ == "__main__":
+    main()
