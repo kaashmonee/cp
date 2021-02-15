@@ -17,6 +17,8 @@ const int MAX_N = 1e5 + 1;
 const ll MOD = 1e9 + 7;
 const ll INF = 1e9;
 
+lv q;
+
 
 // log n algorithm to compute the log of some number a with base b
 // this function exists to avoid rounding errors with floats
@@ -53,7 +55,28 @@ void blockmax(ll d, ll *x, ll *ans, ll n) {
 }
 
 void solve() {
-    // write solution here
+    ll n;
+    cin >> n;
+    lv heroes;
+    while (n--) {
+        ll lvl;
+        cin >> lvl;
+        heroes.push_back(lvl); 
+    }
+
+    sort(begin(heroes), end(heroes));
+
+    ll smallest = heroes[0];
+    ll count = 0;
+    for(ll i = 0; i < heroes.size(); i++) {
+        if (heroes[i] <= smallest) {
+            count = i+1;
+        } else if (heroes[i] > smallest) {
+            break;
+        }
+    }
+
+    cout<<heroes.size()-count<<"\n";
 }
 
 
