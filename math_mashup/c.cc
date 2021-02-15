@@ -110,38 +110,34 @@ void solve() {
     cin >> n >> k;
 
     if (k >= n) {
-        cout<<k<<"\n";
+        cout<<1<<"\n";
         return;
     }
 
-    lms pfs = generate_prime_factors(n);
-    lms pfsk = generate_prime_factors(k);
+    ll max_d = intmin;
 
-    // print_lms(pfs);
-    // print_lms(pfsk);
-
-    lv intersected;
-
-    auto result_set = set_intersection(
-        pfs.begin(), pfs.end(), pfsk.begin(), pfsk.end(), 
-        back_inserter(intersected)
-    );
-
-    ll prod = 1;
-
-    // print_list(intersected);
-    // newline;
-
-    for (auto e : intersected) {
-        prod *= e;
+    for (ll i = 1; i < sqrt(n)+1; i++) {
+        if (n % i == 0) {
+            ll d1 = i;
+            ll d2 = n/i;
+            // cout<<"d1, d2: "<<d1<<" "<<d2<<"\n";
+            // cout<<"k: "<<k<<"\n";
+            if (d2 > d1 && d2 <= k) {
+                if (d2 > max_d) {
+                    max_d = d2;
+                }
+            } else {
+                if (d1 <= k) {
+                    if (d1 > max_d) {
+                        max_d = d1;
+                    }
+                }
+            }
+        }
     }
 
-    ll result = n/prod;
-
-
-    // we have to find the largest product of prime factors less than or 
-    // equal to k
-
+    // cout<<"max d: "<<max_d<<"\n";
+    ll result = n/max_d;
     cout<<result<<"\n";
 }
 
