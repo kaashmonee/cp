@@ -12,6 +12,8 @@ using namespace std;
 #define intmin LLONG_MIN
 #define intmax LLONG_MAX
 #define lv vector<long long>
+#define ls set<long long>
+#define lms multiset<long long>
 
 const int MAX_N = 1e5 + 1;
 const ll MOD = 1e9 + 7;
@@ -63,6 +65,20 @@ lv generate_prime_factors(ll n) {
     }
 
     return factors;
+}
+
+void print_lms(lms s) {
+    for (auto it = s.begin(); it != s.end(); it++) {
+        cout<<*it<<" ";
+    }
+    newline;
+}
+
+void print_ls(ls s) {
+    for (auto it = s.begin(); it != s.end(); it++) {
+        cout<<*it<<" ";
+    }
+    newline;
 }
 
 void blockmax(ll d, ll *x, ll *ans, ll n) {
