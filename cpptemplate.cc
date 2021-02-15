@@ -17,6 +17,8 @@ const int MAX_N = 1e5 + 1;
 const ll MOD = 1e9 + 7;
 const ll INF = 1e9;
 
+lv q;
+
 
 // log n algorithm to compute the log of some number a with base b
 // this function exists to avoid rounding errors with floats
@@ -30,6 +32,37 @@ ll compute_log(ll a, ll b) {
         ctr++;
     }
     return ctr;
+}
+
+/* 
+ * Generates all the prime factors given n
+ * and returns a vector containing them. 
+ * This code is from: 
+ * https://www.geeksforgeeks.org/print-all-prime-factors-of-a-given-number/.
+ */
+lv generate_prime_factors(ll n) {
+    lv factors;
+
+    while (n % 2 == 0) {
+        factors.push_back(2);
+        n /= 2;
+    }
+
+    for (ll i = 3; i <= sqrt(n); i+=2) {
+
+        // while i divides n, add i to the list and divide n
+        while (n % i == 0) {
+            factors.push_back(i);
+            n /= i;
+        }
+    }
+
+    if (n > 2) {
+        // this means that n is  aprime greater than 2.
+        factors.push_back(n);
+    }
+
+    return factors;
 }
 
 void blockmax(ll d, ll *x, ll *ans, ll n) {
