@@ -14,6 +14,7 @@ using namespace std;
 #define lv vector<long long>
 #define ls set<long long>
 #define lms multiset<long long>
+#define lm map<long, long>
 
 const int MAX_N = 1e5 + 1;
 const ll MOD = 1e9 + 7;
@@ -36,17 +37,22 @@ ll compute_log(ll a, ll b) {
     return ctr;
 }
 
+
 /* 
  * Generates all the prime factors given n
  * and returns a vector containing them. 
  * This code is from: 
  * https://www.geeksforgeeks.org/print-all-prime-factors-of-a-given-number/.
  */
-lv generate_prime_factors(ll n) {
-    lv factors;
+lm generate_prime_factors(ll n) {
+    lm factors;
 
     while (n % 2 == 0) {
-        factors.push_back(2);
+        if (factors.find(2) != factors.end()) {
+            factors[2]++;
+        } else {
+            factors[2] = 1;
+        }
         n /= 2;
     }
 
@@ -54,17 +60,35 @@ lv generate_prime_factors(ll n) {
 
         // while i divides n, add i to the list and divide n
         while (n % i == 0) {
-            factors.push_back(i);
+            if (factors.find(i) != factors.end()) {
+                factors[i]++;
+            } else {
+                factors[i] = 1;
+            }
             n /= i;
         }
     }
 
     if (n > 2) {
         // this means that n is  aprime greater than 2.
-        factors.push_back(n);
+        factors[n] = 1;
     }
 
     return factors;
+}
+
+// Computes the euler totient function
+// The euler totient function counts the number of integers that are coprime
+// from 1 to n.
+ll totient(ll n) {
+    lm primes = generate_prime_factors(n);
+
+    ll t = 1;
+    for (auto p : primes) {
+        t *= (ll) powl(p.first, p.second-1) * (p.first-1);
+    }
+
+    return t;
 }
 
 void print_lms(lms s) {

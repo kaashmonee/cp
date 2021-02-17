@@ -80,13 +80,10 @@ def solve():
     cur_num = primes[0]
     i = 0
     while cur_num <= n:
-        # print("cur_num:", cur_num, n)
         cur_num = primes[i]+primes[i+1]+1
         results[i] = 1 if primes[i]+primes[i+1]+1 in primes_set else 0
-        # print("results[%d]: %d" % (primes[i]+primes[i+1]+1, results[i]))
         i += 1
 
-    # print("results:", results)
     if sum(results) >= k:
         print("YES")
     else:

@@ -126,6 +126,7 @@ ll modpow(ll x, ll n, ll m) {
     ll u = modpow(x,n/2,m);
 
     u = (u*u)%m;
+    // cout<<"u: "<<u<<"\n";
 
     if (n%2 == 1) u = (u*x)%m;
     
@@ -237,9 +238,10 @@ ll h(ll n, ll p) {
     ll k = 1;
     ll sum = 0;
     ll val = 1;
+    // cout<<"n: "<<n<<"\n";
 
     while (val > 0) {
-        val = floor(n/(pow(p, k)));
+        val = n/((ll) powl(p, k));
         sum += val;
         k++;
         // cout<<"val: "<<val<<"\n";
@@ -251,19 +253,23 @@ ll h(ll n, ll p) {
 void solve() {
     ll x, n;
     cin >> x >> n;
-    cout<<"n: "<<n<<"\n";
+    // cout<<"n: "<<n<<"\n";
 
     auto primes = generate_prime_factors(x);
-    print_lm(primes);
+    // print_lm(primes);
 
     ll prod = 1;
     for (auto p : primes) {
-        unsigned long long hn = (unsigned long long) h(n, p.first);
-        prod *= (modpow(p.first, hn, MOD) % MOD) % MOD;
-        cout<<"hn: "<<hn<<"\n";
-        cout<<"hnmod: "<<hn % (MOD)<<"\n";
-        cout<<"prod: "<<prod<<"\n";
-        cout<<"modpow: "<<modpow(p.first, hn, MOD)<<"\n";
+        ll hn = h(n, (ll) p.first);
+        // cout<<"p.first: "<<p.first<<"\n";
+        // cout<<"p.first, hn: "<<p.first<<", "<<hn<<"\n";
+        // cout<<"hn % (MOD-1): "<<hn % (MOD-1)<<"\n";
+        prod %= MOD;
+        prod *= (modpow(p.first % MOD, hn % (MOD-1), MOD)) % MOD;
+        // cout<<"hn: "<<hn<<"\n";
+        // cout<<"hnmod: "<<hn % (MOD)<<"\n";
+        // cout<<"prod: "<<prod<<"\n";
+        // cout<<"modpow: "<<modpow(p.first, hn, MOD)<<"\n";
     }
 
     cout<<prod % MOD<<"\n";
