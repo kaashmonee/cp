@@ -105,6 +105,22 @@ void print_ls(ls s) {
     newline;
 }
 
+// modular exponent function taken from:
+// CP handbook
+ll modpow(ll x, ll n, ll m) {
+    if (n == 0) 
+        return 1%m;
+
+    ll u = modpow(x,n/2,m);
+
+    u = (u*u)%m;
+    // cout<<"u: "<<u<<"\n";
+
+    if (n%2 == 1) u = (u*x)%m;
+    
+    return u;
+}
+
 void blockmax(ll d, ll *x, ll *ans, ll n) {
     // d is the block size
     // x[] is an array of size n
