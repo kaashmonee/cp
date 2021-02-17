@@ -120,8 +120,6 @@ void solve() {
         if (n % i == 0) {
             ll d1 = i;
             ll d2 = n/i;
-            // cout<<"d1, d2: "<<d1<<" "<<d2<<"\n";
-            // cout<<"k: "<<k<<"\n";
             if (d2 > d1 && d2 <= k) {
                 if (d2 > max_d) {
                     max_d = d2;
@@ -136,7 +134,6 @@ void solve() {
         }
     }
 
-    // cout<<"max d: "<<max_d<<"\n";
     ll result = n/max_d;
     cout<<result<<"\n";
 }

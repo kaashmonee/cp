@@ -74,11 +74,29 @@ primes_set = set(primes)
 
 
 def solve():
-    pass
+    n, k = mul()
+
+    results = [0 for _ in range(n)]
+    cur_num = primes[0]
+    i = 0
+    while cur_num <= n:
+        # print("cur_num:", cur_num, n)
+        cur_num = primes[i]+primes[i+1]+1
+        results[i] = 1 if primes[i]+primes[i+1]+1 in primes_set else 0
+        # print("results[%d]: %d" % (primes[i]+primes[i+1]+1, results[i]))
+        i += 1
+
+    # print("results:", results)
+    if sum(results) >= k:
+        print("YES")
+    else:
+        print("NO")
+
 
 def main():
 
-    tests = inp()
+    # tests = inp()
+    tests = 1
 
     for _ in range(tests):
         solve()
