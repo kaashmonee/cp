@@ -56,35 +56,11 @@ void solve() {
     ll n, k;
     cin >> n >> k;
 
-    lv cata(n);
+    ll f = n/2;
+    ll result = ((k-1) + (n % 2) * (k-1)/f) % n + 1;
 
-    for (ll i = 0; i < n; i++) {
-        cata[i] = n-i;
-    }
+    cout<<result<<"\n";
 
-    ll cur_pos = 0;
-
-    // if (k == 1) {
-    //     cout<<cur_pos<<"\n";
-    //     return;
-    // }
-
-    for (ll i = 0; i < k; i++) {
-        ll cata_ind = i % n;
-        cur_pos++;
-        if (cur_pos > n) {
-            cur_pos -= n;
-        }
-        if (cata[cata_ind] == cur_pos) {
-            cur_pos++;
-            if (cur_pos > n) {
-                cur_pos -= n;
-            }
-        }
-        cout<<"cur_pos: "<<cur_pos<<" ";
-    }
-    newline;
-    cout<<cur_pos<<"\n";
 }
 
 
