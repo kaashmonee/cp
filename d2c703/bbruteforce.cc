@@ -105,6 +105,29 @@ void print_ls(ls s) {
     newline;
 }
 
+void print_lm(lm m) {
+    for (auto e : m) {
+        cout<<"K: "<<e.first<<" V: "<<e.second<<"\n";
+    }
+    newline;
+}
+
+// modular exponent function taken from:
+// CP handbook
+ll modpow(ll x, ll n, ll m) {
+    if (n == 0) 
+        return 1%m;
+
+    ll u = modpow(x,n/2,m);
+
+    u = (u*u)%m;
+    // cout<<"u: "<<u<<"\n";
+
+    if (n%2 == 1) u = (u*x)%m;
+    
+    return u;
+}
+
 void blockmax(ll d, ll *x, ll *ans, ll n) {
     // d is the block size
     // x[] is an array of size n
@@ -124,76 +147,61 @@ void blockmax(ll d, ll *x, ll *ans, ll n) {
         }
     }
 }
-// modular exponent function taken from:
-// CP handbook
-ll modpow(ll x, ll n, ll m) {
-    if (n == 0) 
-        return 1%m;
-
-    ll u = modpow(x,n/2,m);
-
-    u = (u*u)%m;
-    // cout<<"u: "<<u<<"\n";
-
-    if (n%2 == 1) u = (u*x)%m;
-    
-    return u;
-}
 
 void solve() {
     // write solution here
-    ll n, a, b, k;
-    cin >> n >> a >> b >> k;
-    lv s;
-    for (ll i = 0; i < k; i++) {
-        ll num;
-        // if (i < k) {
-        char c;
-        cin >> c;
-        if (c == '+') num = 1;
-        else num = -1;
+    ll n;
+    cin >> n;
+    lv xc, yc;
 
-        s.push_back(num);
+    ll xsum = 0;
+    ll ysum = 0;
+
+    for (ll i = 0; i < n; i++) {
+        ll x, y;
+        cin >> x >> y;
+        xc.push_back(x);
+        yc.push_back(y);
+
+        xsum += x;
+        ysum += y;
     }
 
-    // print_list(s);
-    // newline;
+    ll xave = xsum/n;
+    ll yave = ysum/n;
 
-    ll mod = 1e9 + 9;
-    ll kresult = 0;
-    for (ll i = 0; i < k ; i++) {
-        ll sign = s[i];
-        // cout<<"ind: "<<i%k<<"\n";
-        // cout<<"sign: "<<sign<<"\n";
-        ll v = ((sign * modpow(a, n-i, mod)) % mod) * (modpow(b, i, mod)) % mod;
-        kresult += v;
-    }
-    kresult %= mod;
+    lv candx = {xave+1, xave+2, xave+3, xave, xave-1, xave-2, xave-3};
+    lv candy = {yave+1, yave+2, yave+3, yave, yave-1, yave-2, yave-3};
 
-    // now compute the remaining results
-    ll mul = n/k;
-    ll result;
+    lm dists;
 
+    for (ll i = 0; i < 7; i++) {
+        for (ll j = 0; j < 7; j++) {
+            ll cx = candx[i];
+            ll cy = candy[j];
+            ll d = 0;
 
-    if (mul > 0) {
-        result = (kresult * (mul % mod)) % mod;
-        ll num_remain = n % k;
-        for (ll i = mul+1; i < mul+num_remain; i++) {
-            ll sign = s[i%k];
-            // cout<<"ind: "<<i%k<<"\n";
-            // cout<<"sign: "<<sign<<"\n";
-            ll v = ((sign * modpow(a, n-i, mod)) % mod) * (modpow(b, i, mod)) % mod;
-            result += v;
+            for (ll k = 0; k < n; k++) {
+                ll x, y;
+                x = xc[k];
+                y = yc[k];
 
+                d += abs(x-cx) + abs(y-cy);
+            }
+
+            if (dists.find(d) != dists.end()) {
+                dists[d]++;
+            } else {
+                dists[d] = 1;
+            }
         }
-
-    } else {
-        result = kresult;
     }
-    // if (result < 0) {
-    //     result += mod;
-    // }
-    cout<<result<<"\n";
+
+    ll mind = dists.begin()->first;
+    // print_lm(dists);
+    // cout<<"mind: "<<mind<<"\n";
+
+    cout<<dists[mind]<<"\n";
 
 }
 
@@ -203,7 +211,7 @@ int main() {
     ios_base::sync_with_stdio(0);
     cin.tie(0); cout.tie(0);
     int tc = 1; 
-    // cin >> tc; // comment out this lnie if only 1 test
+    cin >> tc; // comment out this lnie if only 1 test
     for (int t = 1; t <= tc; t++) {
         solve();
     }

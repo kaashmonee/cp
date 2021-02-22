@@ -124,76 +124,22 @@ void blockmax(ll d, ll *x, ll *ans, ll n) {
         }
     }
 }
-// modular exponent function taken from:
-// CP handbook
-ll modpow(ll x, ll n, ll m) {
-    if (n == 0) 
-        return 1%m;
 
-    ll u = modpow(x,n/2,m);
-
-    u = (u*u)%m;
-    // cout<<"u: "<<u<<"\n";
-
-    if (n%2 == 1) u = (u*x)%m;
-    
-    return u;
-}
-
-void solve() {
+void solve(ls cubes) {
     // write solution here
-    ll n, a, b, k;
-    cin >> n >> a >> b >> k;
-    lv s;
-    for (ll i = 0; i < k; i++) {
-        ll num;
-        // if (i < k) {
-        char c;
-        cin >> c;
-        if (c == '+') num = 1;
-        else num = -1;
+    ll x;
+    cin >> x;
 
-        s.push_back(num);
-    }
-
-    // print_list(s);
-    // newline;
-
-    ll mod = 1e9 + 9;
-    ll kresult = 0;
-    for (ll i = 0; i < k ; i++) {
-        ll sign = s[i];
-        // cout<<"ind: "<<i%k<<"\n";
-        // cout<<"sign: "<<sign<<"\n";
-        ll v = ((sign * modpow(a, n-i, mod)) % mod) * (modpow(b, i, mod)) % mod;
-        kresult += v;
-    }
-    kresult %= mod;
-
-    // now compute the remaining results
-    ll mul = n/k;
-    ll result;
-
-
-    if (mul > 0) {
-        result = (kresult * (mul % mod)) % mod;
-        ll num_remain = n % k;
-        for (ll i = mul+1; i < mul+num_remain; i++) {
-            ll sign = s[i%k];
-            // cout<<"ind: "<<i%k<<"\n";
-            // cout<<"sign: "<<sign<<"\n";
-            ll v = ((sign * modpow(a, n-i, mod)) % mod) * (modpow(b, i, mod)) % mod;
-            result += v;
-
+    for (ll i = 1; i < 1e4; i++) {
+        ll cubed = (ll) powl(i, 3);
+        ll residue = x - cubed;
+        if (cubes.find(residue) != cubes.end()) {
+            cout<<"YES\n";
+            return;
         }
-
-    } else {
-        result = kresult;
     }
-    // if (result < 0) {
-    //     result += mod;
-    // }
-    cout<<result<<"\n";
+
+    cout<<"NO\n";
 
 }
 
@@ -203,9 +149,15 @@ int main() {
     ios_base::sync_with_stdio(0);
     cin.tie(0); cout.tie(0);
     int tc = 1; 
-    // cin >> tc; // comment out this lnie if only 1 test
+    ls cubes;
+    for (ll i = 1; i <= 1e4; i++) {
+        ll cubed = (ll) powl(i, 3);
+        cubes.insert(cubed);
+    }
+
+    cin >> tc; // comment out this lnie if only 1 test
     for (int t = 1; t <= tc; t++) {
-        solve();
+        solve(cubes);
     }
 
 }

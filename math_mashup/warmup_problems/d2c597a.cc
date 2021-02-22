@@ -105,6 +105,22 @@ void print_ls(ls s) {
     newline;
 }
 
+// modular exponent function taken from:
+// CP handbook
+ll modpow(ll x, ll n, ll m) {
+    if (n == 0) 
+        return 1%m;
+
+    ll u = modpow(x,n/2,m);
+
+    u = (u*u)%m;
+    // cout<<"u: "<<u<<"\n";
+
+    if (n%2 == 1) u = (u*x)%m;
+    
+    return u;
+}
+
 void blockmax(ll d, ll *x, ll *ans, ll n) {
     // d is the block size
     // x[] is an array of size n
@@ -124,76 +140,58 @@ void blockmax(ll d, ll *x, ll *ans, ll n) {
         }
     }
 }
-// modular exponent function taken from:
-// CP handbook
-ll modpow(ll x, ll n, ll m) {
-    if (n == 0) 
-        return 1%m;
 
-    ll u = modpow(x,n/2,m);
+// C++ program to demonstrate working of 
+// extended Euclidean Algorithm 
+// Function for extended Euclidean Algorithm 
+// Obtained from 
+// https://www.geeksforgeeks.org/euclidean-algorithms-basic-and-extended/
+ll gcdExtended(ll a, ll b, ll *x, ll *y) 
+{ 
+	// Base Case 
+	if (a == 0) 
+	{ 
+		*x = 0; 
+		*y = 1; 
+		return b; 
+	} 
 
-    u = (u*u)%m;
-    // cout<<"u: "<<u<<"\n";
+	ll x1, y1; // To store results of recursive call 
+	ll gcd = gcdExtended(b%a, a, &x1, &y1); 
 
-    if (n%2 == 1) u = (u*x)%m;
-    
-    return u;
-}
+	// Update x and y using results of 
+	// recursive call 
+	*x = y1 - (b/a) * x1; 
+	*y = x1; 
+
+	return gcd; 
+} 
+
+// Driver Code
+// int main() 
+// { 
+// 	int x, y, a = 35, b = 15; 
+// 	int g = gcdExtended(a, b, &x, &y); 
+// 	cout << "GCD(" << a << ", " << b 
+// 		<< ") = " << g << endl;
+// 	return 0; 
+// } 
+
+// This code is contributed by TusharSabhani
+
 
 void solve() {
-    // write solution here
-    ll n, a, b, k;
-    cin >> n >> a >> b >> k;
-    lv s;
-    for (ll i = 0; i < k; i++) {
-        ll num;
-        // if (i < k) {
-        char c;
-        cin >> c;
-        if (c == '+') num = 1;
-        else num = -1;
+    ll a, b;
+    cin >> a >> b;
 
-        s.push_back(num);
-    }
+    ll x, y;
+    ll g = gcdExtended(a, b, &x, &y);
 
-    // print_list(s);
-    // newline;
-
-    ll mod = 1e9 + 9;
-    ll kresult = 0;
-    for (ll i = 0; i < k ; i++) {
-        ll sign = s[i];
-        // cout<<"ind: "<<i%k<<"\n";
-        // cout<<"sign: "<<sign<<"\n";
-        ll v = ((sign * modpow(a, n-i, mod)) % mod) * (modpow(b, i, mod)) % mod;
-        kresult += v;
-    }
-    kresult %= mod;
-
-    // now compute the remaining results
-    ll mul = n/k;
-    ll result;
-
-
-    if (mul > 0) {
-        result = (kresult * (mul % mod)) % mod;
-        ll num_remain = n % k;
-        for (ll i = mul+1; i < mul+num_remain; i++) {
-            ll sign = s[i%k];
-            // cout<<"ind: "<<i%k<<"\n";
-            // cout<<"sign: "<<sign<<"\n";
-            ll v = ((sign * modpow(a, n-i, mod)) % mod) * (modpow(b, i, mod)) % mod;
-            result += v;
-
-        }
-
+    if (g == 1) {
+        cout<<"Finite\n";
     } else {
-        result = kresult;
+        cout<<"Infinite\n";
     }
-    // if (result < 0) {
-    //     result += mod;
-    // }
-    cout<<result<<"\n";
 
 }
 
@@ -203,7 +201,7 @@ int main() {
     ios_base::sync_with_stdio(0);
     cin.tie(0); cout.tie(0);
     int tc = 1; 
-    // cin >> tc; // comment out this lnie if only 1 test
+    cin >> tc; // comment out this lnie if only 1 test
     for (int t = 1; t <= tc; t++) {
         solve();
     }

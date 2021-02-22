@@ -105,6 +105,22 @@ void print_ls(ls s) {
     newline;
 }
 
+// modular exponent function taken from:
+// CP handbook
+ll modpow(ll x, ll n, ll m) {
+    if (n == 0) 
+        return 1%m;
+
+    ll u = modpow(x,n/2,m);
+
+    u = (u*u)%m;
+    // cout<<"u: "<<u<<"\n";
+
+    if (n%2 == 1) u = (u*x)%m;
+    
+    return u;
+}
+
 void blockmax(ll d, ll *x, ll *ans, ll n) {
     // d is the block size
     // x[] is an array of size n
@@ -124,76 +140,43 @@ void blockmax(ll d, ll *x, ll *ans, ll n) {
         }
     }
 }
-// modular exponent function taken from:
-// CP handbook
-ll modpow(ll x, ll n, ll m) {
-    if (n == 0) 
-        return 1%m;
-
-    ll u = modpow(x,n/2,m);
-
-    u = (u*u)%m;
-    // cout<<"u: "<<u<<"\n";
-
-    if (n%2 == 1) u = (u*x)%m;
-    
-    return u;
-}
 
 void solve() {
     // write solution here
-    ll n, a, b, k;
-    cin >> n >> a >> b >> k;
-    lv s;
-    for (ll i = 0; i < k; i++) {
-        ll num;
-        // if (i < k) {
-        char c;
-        cin >> c;
-        if (c == '+') num = 1;
-        else num = -1;
+    ll n, c;
+    cin >> n >> c;
 
-        s.push_back(num);
+    lv points;
+    for (ll i = 0; i < n; i++) {
+        ll point;
+        cin >> point;
+        points.push_back(point);
     }
 
-    // print_list(s);
-    // newline;
 
-    ll mod = 1e9 + 9;
-    ll kresult = 0;
-    for (ll i = 0; i < k ; i++) {
-        ll sign = s[i];
-        // cout<<"ind: "<<i%k<<"\n";
-        // cout<<"sign: "<<sign<<"\n";
-        ll v = ((sign * modpow(a, n-i, mod)) % mod) * (modpow(b, i, mod)) % mod;
-        kresult += v;
-    }
-    kresult %= mod;
+    map<long long, vector<tuple<long, long>>> cows;
+    long double optimal = ((long double) points[n-1]) / ((long double) c);
 
-    // now compute the remaining results
-    ll mul = n/k;
-    ll result;
+    ll cows_left = c;
 
+    for (ll i = 0; i < n-1; i++) {
+        if ((long double) points[i+1]-points[i] >= optimal) {
+            ll dist = points[i+1] - points[i];
+            if (cows.find(dist) != cows.end()) {
+                cows[dist].push_back({i, i+1});
+            } else {
+                vector<tuple<long, long>> v;
+                v.push_back({i, i+1});
+                cows[dist] = v;
+            }
 
-    if (mul > 0) {
-        result = (kresult * (mul % mod)) % mod;
-        ll num_remain = n % k;
-        for (ll i = mul+1; i < mul+num_remain; i++) {
-            ll sign = s[i%k];
-            // cout<<"ind: "<<i%k<<"\n";
-            // cout<<"sign: "<<sign<<"\n";
-            ll v = ((sign * modpow(a, n-i, mod)) % mod) * (modpow(b, i, mod)) % mod;
-            result += v;
-
+            cows_left--;
         }
-
-    } else {
-        result = kresult;
     }
-    // if (result < 0) {
-    //     result += mod;
-    // }
-    cout<<result<<"\n";
+
+    if (cows_left > 0) {
+         
+    }
 
 }
 
@@ -203,7 +186,7 @@ int main() {
     ios_base::sync_with_stdio(0);
     cin.tie(0); cout.tie(0);
     int tc = 1; 
-    // cin >> tc; // comment out this lnie if only 1 test
+    cin >> tc; // comment out this lnie if only 1 test
     for (int t = 1; t <= tc; t++) {
         solve();
     }
