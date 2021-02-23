@@ -15,6 +15,7 @@ using namespace std;
 #define ls set<long long>
 #define lms multiset<long long>
 #define lm map<long, long>
+#define cs set<char>
 
 const int MAX_N = 1e5 + 1;
 const ll MOD = 1e9 + 7;
@@ -105,13 +106,6 @@ void print_ls(ls s) {
     newline;
 }
 
-void print_lm(lm m) {
-    for (auto e : m) {
-        cout<<"K: "<<e.first<<" V: "<<e.second<<"\n";
-    }
-    newline;
-}
-
 // modular exponent function taken from:
 // CP handbook
 ll modpow(ll x, ll n, ll m) {
@@ -127,7 +121,6 @@ ll modpow(ll x, ll n, ll m) {
     
     return u;
 }
-
 
 void blockmax(ll d, ll *x, ll *ans, ll n) {
     // d is the block size
@@ -150,7 +143,50 @@ void blockmax(ll d, ll *x, ll *ans, ll n) {
 }
 
 void solve() {
-    // write solution here
+    string s;
+    cin >> s;
+
+    if (s.length() < 3) {
+        cout<<0<<"\n";
+        return;
+    }
+
+    ll slen = s.length();
+
+    ll start = 0, end = 0;
+    ll prev = 0;
+
+    ll smallest = intmax;
+
+    while (end < slen) {
+        if (s[end] != s[prev]) {
+            if (s[end] == s[start]) {
+                start = end-1;
+            } else {
+                // We know that the current element is different from the 
+                // previous element.
+                //  We also know it's different from the first element.
+                if (s[prev] != s[start]) {
+                    if (end+1-start < smallest) {
+                        smallest = end+1-start;
+                        if (smallest == 3) {
+                            cout<<3<<"\n";
+                            return;
+                        }
+                    }
+                }
+                start = end-1;
+            }
+        }
+        prev = end;
+        end++;
+    }
+
+    if (smallest == intmax) {
+        cout<<0<<"\n";
+    } else {
+        cout<<smallest<<"\n";
+    }
 }
 
 

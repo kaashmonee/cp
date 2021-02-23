@@ -105,6 +105,13 @@ void print_ls(ls s) {
     newline;
 }
 
+void print_lm(lm m) {
+    for (auto e : m) {
+        cout<<"K: "<<e.first<<" V: "<<e.second<<"\n";
+    }
+    newline;
+}
+
 // modular exponent function taken from:
 // CP handbook
 ll modpow(ll x, ll n, ll m) {
@@ -141,42 +148,82 @@ void blockmax(ll d, ll *x, ll *ans, ll n) {
     }
 }
 
+// checks if c cows fit with distance
+// d apart
+bool cows_fit(lv &points, ll c, ll d, lm &dists) {
+
+    ll min_dist = intmax;
+    ll last_point = -d;
+
+
+    for (ll point : points) {
+        if (point - last_point >= d) {
+            if (point-last_point < min_dist) {
+                min_dist = point-last_point;
+            }
+            last_point = point;
+            c--;
+        }
+    }
+    dists[d] = min_dist;
+    return c == 0;
+}
+
 void solve() {
     // write solution here
     ll n, c;
     cin >> n >> c;
 
-    lv points;
+    lv cows(n);
     for (ll i = 0; i < n; i++) {
-        ll point;
-        cin >> point;
-        points.push_back(point);
+        cin >> cows[i];
     }
 
+    // Represents the maximum number of cows that we could have
+    ll d = cows[n-1]/c;
 
-    map<long long, vector<tuple<long, long>>> cows;
-    long double optimal = ((long double) points[n-1]) / ((long double) c);
+    lm dists;
 
-    ll cows_left = c;
+    bool cows_fitd;
+    ls seen;
+    lv seen_list;
 
-    for (ll i = 0; i < n-1; i++) {
-        if ((long double) points[i+1]-points[i] >= optimal) {
-            ll dist = points[i+1] - points[i];
-            if (cows.find(dist) != cows.end()) {
-                cows[dist].push_back({i, i+1});
+    while (1) {
+
+        if (seen.find(d) != seen.end()) {
+            break;
+        }
+
+        cows_fitd = cows_fit(cows, c, d, dists);
+        seen.insert(d);
+        seen_list.push_back(d);
+
+        if (!cows_fitd) {
+
+            cows_fitd = cows_fit(cows, c, d+1, dists);
+            seen.insert(d+1);
+            seen_list.push_back(d+1);
+
+            if (!cows_fitd) {
+                d -= d/2;
             } else {
-                vector<tuple<long, long>> v;
-                v.push_back({i, i+1});
-                cows[dist] = v;
+                d++;
             }
 
-            cows_left--;
+        } else {
+            d += d/2;
         }
     }
 
-    if (cows_left > 0) {
-         
-    }
+    ll maxd = seen_list.end()[-2];
+
+    print_list(seen_list);
+    newline;
+
+    print_lm(dists);
+
+    ll result = dists[maxd];
+    cout<<result<<"\n";
 
 }
 
@@ -186,7 +233,7 @@ int main() {
     ios_base::sync_with_stdio(0);
     cin.tie(0); cout.tie(0);
     int tc = 1; 
-    cin >> tc; // comment out this lnie if only 1 test
+    // cin >> tc; // comment out this lnie if only 1 test
     for (int t = 1; t <= tc; t++) {
         solve();
     }

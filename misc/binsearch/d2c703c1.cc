@@ -105,13 +105,6 @@ void print_ls(ls s) {
     newline;
 }
 
-void print_lm(lm m) {
-    for (auto e : m) {
-        cout<<"K: "<<e.first<<" V: "<<e.second<<"\n";
-    }
-    newline;
-}
-
 // modular exponent function taken from:
 // CP handbook
 ll modpow(ll x, ll n, ll m) {
@@ -127,7 +120,6 @@ ll modpow(ll x, ll n, ll m) {
     
     return u;
 }
-
 
 void blockmax(ll d, ll *x, ll *ans, ll n) {
     // d is the block size
@@ -150,7 +142,66 @@ void blockmax(ll d, ll *x, ll *ans, ll n) {
 }
 
 void solve() {
-    // write solution here
+    ll n;
+    cin >> n;
+
+    // represents size of the array we're searching
+    ll an = n;
+
+    ll l = 1;
+    ll r = n;
+    ll prev_ind = -1;
+    // cout<<"? "<<l<<" "<<r<<"\n";
+    // cout.flush();
+    // cin >> prev_ind; 
+
+    while (r-l>1) {
+        // l += (r-l)/2;
+        ll leftl, rightl, leftr, rightr;
+        leftl = l;
+        rightl = r - (r-l)/2;
+
+        leftr = rightl + 1;
+        rightr = r;
+
+        ll ind;
+        cout<<"? "<<l<<" "<<r<<"\n";
+        cout.flush();
+        cin >> ind;
+
+        if (ind == prev_ind) {
+            l = leftl;
+            r = rightl;
+        } else {
+            if (ind <= rightl) {
+                l = leftl;
+                r = rightl;
+            } else {
+                l = leftr;
+                r = rightr;
+            }
+        }
+        prev_ind = ind;
+    }
+
+    if (prev_ind == r) {
+        cout<<"! "<<r<<"\n";
+        cout.flush();
+    } else if (prev_ind == -1) {
+        cout<<"? "<<l<<" "<<r<<"\n";
+        cout.flush();
+        cin >> prev_ind; 
+        if (prev_ind == l) {
+            cout<<"! "<<r<<"\n";
+        } else {
+            cout<<"! "<<l<<"\n";
+        }
+        cout.flush();
+    } else {
+        cout<<"! "<<l<<"\n";
+        cout.flush();
+    }
+
 }
 
 
@@ -159,7 +210,7 @@ int main() {
     ios_base::sync_with_stdio(0);
     cin.tie(0); cout.tie(0);
     int tc = 1; 
-    cin >> tc; // comment out this lnie if only 1 test
+    // cin >> tc; // comment out this lnie if only 1 test
     for (int t = 1; t <= tc; t++) {
         solve();
     }
