@@ -150,23 +150,23 @@ void blockmax(ll d, ll *x, ll *ans, ll n) {
 
 // checks if c cows fit with distance
 // d apart
-bool cows_fit(lv &points, ll c, ll d, lm &dists) {
+bool cows_fit(lv &points, ll c, ll d) {
 
     ll min_dist = intmax;
     ll last_point = -d;
 
-
     for (ll point : points) {
         if (point - last_point >= d) {
-            if (point-last_point < min_dist) {
+            if (last_point >= 0 && point-last_point < min_dist) {
                 min_dist = point-last_point;
             }
             last_point = point;
             c--;
+            if (c <= 0) return true;
         }
     }
-    dists[d] = min_dist;
-    return c == 0;
+
+    return c <= 0;
 }
 
 void solve() {
@@ -179,8 +179,9 @@ void solve() {
         cin >> cows[i];
     }
 
+    sort(begin(cows), end(cows));
+
     // Represents the maximum number of cows that we could have
-    ll d = cows[n-1]/c;
 
     lm dists;
 
@@ -188,42 +189,23 @@ void solve() {
     ls seen;
     lv seen_list;
 
-    while (1) {
+    ll ctr = 0;
+    ll lo = 1, hi = cows[n-1];
+    ll mid = (hi-lo)/2;
 
-        if (seen.find(d) != seen.end()) {
-            break;
-        }
+    while (lo < hi-1) {
 
-        cows_fitd = cows_fit(cows, c, d, dists);
-        seen.insert(d);
-        seen_list.push_back(d);
+        cows_fitd = cows_fit(cows, c, mid);
 
         if (!cows_fitd) {
-
-            cows_fitd = cows_fit(cows, c, d+1, dists);
-            seen.insert(d+1);
-            seen_list.push_back(d+1);
-
-            if (!cows_fitd) {
-                d -= d/2;
-            } else {
-                d++;
-            }
-
+            hi = mid;
+            mid -= (hi-lo)/2;
         } else {
-            d += d/2;
+            lo = mid;
+            mid += (hi-lo)/2;
         }
     }
-
-    ll maxd = seen_list.end()[-2];
-
-    print_list(seen_list);
-    newline;
-
-    print_lm(dists);
-
-    ll result = dists[maxd];
-    cout<<result<<"\n";
+    cout<<lo<<"\n";
 
 }
 
