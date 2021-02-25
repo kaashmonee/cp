@@ -128,6 +128,7 @@ ll modpow(ll x, ll n, ll m) {
     return u;
 }
 
+
 void blockmax(ll d, ll *x, ll *ans, ll n) {
     // d is the block size
     // x[] is an array of size n
@@ -148,75 +149,78 @@ void blockmax(ll d, ll *x, ll *ans, ll n) {
     }
 }
 
-// checks if c cows fit with distance
-// d apart
-bool cows_fit(lv &points, ll c, ll d) {
-
-    ll min_dist = intmax;
-    ll last_point = -d;
-
-    for (ll point : points) {
-        if (point - last_point >= d) {
-            if (last_point >= 0 && point-last_point < min_dist) {
-                min_dist = point-last_point;
-            }
-            last_point = point;
-            c--;
-            if (c <= 0) return true;
+bool is_ramp_number(string s) {
+    char prev = s[0];
+    for (char c : s) {
+        if (c < prev) {
+            return false;
         }
+        prev = c;
     }
-
-    return c <= 0;
+    return true;
 }
 
-void solve() {
+map<string, ll> mem;
+
+ll solve(string num) {
     // write solution here
-    ll n, c;
-    cin >> n >> c;
-
-    lv cows(n);
-    for (ll i = 0; i < n; i++) {
-        cin >> cows[i];
+    // string num;
+    // cin >> num;
+    if (!is_ramp_number(num)) {
+        return -1;
     }
 
-    sort(begin(cows), end(cows));
+    ll strlen = num.length();
 
-    // Represents the maximum number of cows that we could have
+    if (num.length() == 1) {
+        return mem[num];
+    } else if (num.back() == '0') {
+        string fin = to_string(9);
+        ll mid = num.end()[-2] - '0';
+        mid--;
+        string str_mid = to_string(mid);
 
-    lm dists;
+        string recurse = num.substr(0, strlen-2) + str_mid + fin;
 
-    bool cows_fitd;
-    ls seen;
-    lv seen_list;
-
-    ll ctr = 0;
-    ll lo = 1, hi = cows[n-1];
-    ll mid = (hi-lo)/2;
-
-    while (lo < hi-1) {
-
-        cows_fitd = cows_fit(cows, c, mid);
-
-        if (!cows_fitd) {
-            hi = mid;
-            mid -= (hi-lo)/2;
-        } else {
-            lo = mid;
-            mid += (hi-lo)/2;
-        }
+        ll recurse_result = solve(recurse);
+        mem[recurse] = recurse_result;
+        mem[num] = recurse_result;
+        return recurse_result;
     }
-    cout<<lo<<"\n";
+
+    string last = string(1, num.back());
+    ll b = num.end()[-2] - '0';
+
+    // string remain = num.substr(0, strlen-2) + to_string(b-1) + to_string(9);
+    string remain = num.substr(0, strlen-1) + to_string(0);
+    cout<<"remain: "<<remain<<"\n";
+
+    ll last_num_result = solve(last);
+    ll result = last_num_result - b + 1 + solve(remain);
+
+    mem[num] = result;
+    mem[remain] = result - last_num_result + b - 1;
+
+    return result;
 }
-
 
 
 int main() {
     ios_base::sync_with_stdio(0);
     cin.tie(0); cout.tie(0);
     int tc = 1; 
-    // cin >> tc; // comment out this lnie if only 1 test
+    cin >> tc; // comment out this lnie if only 1 test
+
+
+    for (ll i = 1; i < 9; i++) {
+        mem[to_string(i)] = i;
+    }
+
     for (int t = 1; t <= tc; t++) {
-        solve();
+        string num;
+        cin >> num;
+        ll result = solve(num);
+        cout<<result<<"\n";
     }
 
 }

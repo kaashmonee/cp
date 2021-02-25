@@ -128,6 +128,7 @@ ll modpow(ll x, ll n, ll m) {
     return u;
 }
 
+
 void blockmax(ll d, ll *x, ll *ans, ll n) {
     // d is the block size
     // x[] is an array of size n
@@ -148,64 +149,54 @@ void blockmax(ll d, ll *x, ll *ans, ll n) {
     }
 }
 
-// checks if c cows fit with distance
-// d apart
-bool cows_fit(lv &points, ll c, ll d) {
-
-    ll min_dist = intmax;
-    ll last_point = -d;
-
-    for (ll point : points) {
-        if (point - last_point >= d) {
-            if (last_point >= 0 && point-last_point < min_dist) {
-                min_dist = point-last_point;
-            }
-            last_point = point;
-            c--;
-            if (c <= 0) return true;
-        }
-    }
-
-    return c <= 0;
-}
-
 void solve() {
     // write solution here
-    ll n, c;
-    cin >> n >> c;
+    // return;
+    ll n;
+    cin >> n;
 
-    lv cows(n);
+    lv deck(n);
+    map<ll, set<ll>> inds;
+
     for (ll i = 0; i < n; i++) {
-        cin >> cows[i];
-    }
+        cin >> deck[i];
 
-    sort(begin(cows), end(cows));
-
-    // Represents the maximum number of cows that we could have
-
-    lm dists;
-
-    bool cows_fitd;
-    ls seen;
-    lv seen_list;
-
-    ll ctr = 0;
-    ll lo = 1, hi = cows[n-1];
-    ll mid = (hi-lo)/2;
-
-    while (lo < hi-1) {
-
-        cows_fitd = cows_fit(cows, c, mid);
-
-        if (!cows_fitd) {
-            hi = mid;
-            mid -= (hi-lo)/2;
+        if (inds.find(deck[i]) != inds.end()) {
+            inds[deck[i]].insert(i);
         } else {
-            lo = mid;
-            mid += (hi-lo)/2;
+            inds[deck[i]] = set<ll>({i});
         }
     }
-    cout<<lo<<"\n";
+
+    lv new_deck;
+
+    while (deck.size() > 0) {
+        ll largest = inds.rbegin()->first;
+
+        while (inds[largest].size() <= 0) {
+            inds.erase(inds.find(largest));
+            largest = inds.rbegin()->first;
+        }
+        ll largest_ind = *(inds[largest].rbegin());
+
+        ll deck_size = deck.size();
+        for (ll i = largest_ind; i < deck_size; i++) {
+            new_deck.push_back(deck[i]);
+        }
+        ll d = deck_size-1;
+        for (ll i = largest_ind; i < deck_size; i++) {
+            ll del = deck[i];
+
+            auto it = inds[del].find(i);
+            inds[del].erase(it);
+
+            deck.pop_back();
+            d--;
+        }
+    }
+
+    print_list(new_deck);
+    newline;
 }
 
 
@@ -214,7 +205,7 @@ int main() {
     ios_base::sync_with_stdio(0);
     cin.tie(0); cout.tie(0);
     int tc = 1; 
-    // cin >> tc; // comment out this lnie if only 1 test
+    cin >> tc; // comment out this lnie if only 1 test
     for (int t = 1; t <= tc; t++) {
         solve();
     }

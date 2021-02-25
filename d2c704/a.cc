@@ -128,6 +128,7 @@ ll modpow(ll x, ll n, ll m) {
     return u;
 }
 
+
 void blockmax(ll d, ll *x, ll *ans, ll n) {
     // d is the block size
     // x[] is an array of size n
@@ -148,73 +149,27 @@ void blockmax(ll d, ll *x, ll *ans, ll n) {
     }
 }
 
-// checks if c cows fit with distance
-// d apart
-bool cows_fit(lv &points, ll c, ll d) {
-
-    ll min_dist = intmax;
-    ll last_point = -d;
-
-    for (ll point : points) {
-        if (point - last_point >= d) {
-            if (last_point >= 0 && point-last_point < min_dist) {
-                min_dist = point-last_point;
-            }
-            last_point = point;
-            c--;
-            if (c <= 0) return true;
-        }
-    }
-
-    return c <= 0;
-}
-
 void solve() {
-    // write solution here
-    ll n, c;
-    cin >> n >> c;
+    ll p, a, b, c;
+    cin >> p >> a >> b >> c;
+    // cout<<"p: "<<p<<"\n";
 
-    lv cows(n);
-    for (ll i = 0; i < n; i++) {
-        cin >> cows[i];
-    }
+    ll nexta = p < a ? a - p : ceil((double) p / (double) a) * a - p;
+    ll nextb = p < b ? b - p : ceil((double) p / (double) b) * b - p;
+    ll nextc = p < c ? c - p : ceil((double) p / (double) c) * c - p;
 
-    sort(begin(cows), end(cows));
+    // cout<<"next a, b, c\n";
+    // cout<<nexta<<" "<<nextb<<" "<<nextc<<" "<<"\n";
 
-    // Represents the maximum number of cows that we could have
+    cout<<min(min(nexta, nextb), nextc)<<"\n";
 
-    lm dists;
-
-    bool cows_fitd;
-    ls seen;
-    lv seen_list;
-
-    ll ctr = 0;
-    ll lo = 1, hi = cows[n-1];
-    ll mid = (hi-lo)/2;
-
-    while (lo < hi-1) {
-
-        cows_fitd = cows_fit(cows, c, mid);
-
-        if (!cows_fitd) {
-            hi = mid;
-            mid -= (hi-lo)/2;
-        } else {
-            lo = mid;
-            mid += (hi-lo)/2;
-        }
-    }
-    cout<<lo<<"\n";
 }
-
-
 
 int main() {
     ios_base::sync_with_stdio(0);
     cin.tie(0); cout.tie(0);
     int tc = 1; 
-    // cin >> tc; // comment out this lnie if only 1 test
+    cin >> tc; // comment out this lnie if only 1 test
     for (int t = 1; t <= tc; t++) {
         solve();
     }
