@@ -151,6 +151,22 @@ void blockmax(ll d, ll *x, ll *ans, ll n) {
 
 void solve() {
     // write solution here
+    ll c, m, x;
+    cin >> c >> m >> x;
+
+    if (min({c, m, x}) != x) {
+        cout<<min({c, m})<<"\n";
+        return;
+    }
+
+    if (max({c-x, m-x}) >= 2*min({c-x, m-x})) {
+        cout<<x + min({c-x, m-x})<<"\n";
+        return;
+    }
+
+    ll result = x + (c + m - 2*x)/3;
+    cout<<result<<"\n";
+
 }
 
 
