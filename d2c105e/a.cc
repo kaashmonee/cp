@@ -2,7 +2,7 @@
 
 using namespace std;
 
-#define ar array
+#define arr array
 #define ll long long
 #define newline cout<<"\n"
 #define print_list(L) for (auto c : L) {cout<<c<<" ";}
@@ -150,58 +150,71 @@ void blockmax(ll d, ll *x, ll *ans, ll n) {
 }
 
 void solve() {
-    // write solution here
-    ll n, q;
+    string s;
+    cin >> s;
 
-    // strengths
-    lv a(n);
-    
-    // prefix sums of lengths
-    lv ps(n);
+    // alblcr, albrcl, arblcl, albrcr, arblcr, arbrcl
+    bool alblcr = true, albrcl = true, arblcl = true, albrcr = true, arblcr = true, arbrcl = true;
+    // map <ll, bool> bm = map<ll, bool>({{0, true}, {1, true}, {2, true}, {3, true}, {4, true}, {5, true}});
+    map <ll, bool> bm;
+    lm m;
 
-    // maps the prefix sums to the indices
-    lm ps_map;
+    ll al = 0, bl = 0, cl = 0, ar = 0, br = 0, cr = 0;
 
-    for (ll i = 0; i < n; i++) {
-        cin >> a[i];
-        if (i == 0) {
-            ps_map[a[0]] = 0;
-            ps[0] = a[0];
-        } else {
-            ps[i] = a[i] + ps[i-1];
-            ps_map[a[i] + ps[i-1]] = i;
+    ll n = s.size();
+
+    for (char c : s) {
+        if (c == 'A') {
+            al++;
+            ar--;
+        } else if (c == 'B') {
+            bl++;
+            br--;
+        } else if (c == 'C') {
+            cl++;
+            cr--;
+        }
+
+        if (al+bl+cr < 0) {
+            // alblcr = false;
+            bm[0] = false;
+        }
+            m[0] = al+bl+cr;
+        if (al+br+cl < 0) {
+            bm[1] = false;
+        }
+            m[1] = al+br+cl;
+        if (ar+bl+cl < 0) {
+            bm[2] = false;
+        }
+            m[2] = ar+bl+cl;
+        if (al+br+cr < 0) {
+            bm[3] = false;
+        }
+            m[3] = al+br+cr;
+        if (ar+bl+cr < 0) {
+            bm[4] = false;
+        }
+            m[4] = ar+bl+cr;
+        if (ar+br+cl < 0) {
+            bm[5] = false;
+        }
+            m[5] = ar+br+cl;
+    }
+
+    // print_lm(m);
+    // newline;
+
+
+    for (ll i = 0; i < 6; i++) {
+        if (bm.find(i) == bm.end() && m[i] == 0) {
+            cout<<"YES\n";
+            return;
         }
     }
 
-    // attack strengths
-    lv k(q);
-    for (ll i = 0; i < n; i++) {
-        cin >> k[i];
-    }
+    cout<<"NO\n";
 
-    ll damage_done = 0;
-    ll last_alive = 0;
-
-    ll standing = n;
-
-    for (ll i = 0; i < q; i++) {
-
-        damage_done += k[i];
-
-        if (damage_done > ps[n-1]) {
-            damage_done = 0;
-            last_alive = 0;
-            standing = n;
-        } else {
-            auto el = *upper_bound(ps_map.begin(), ps_map.end(), damage_done);
-            last_alive = (ll) el.second;
-
-            standing = n - last_alive;
-        }
-
-        cout<<standing<<"\n";
-
-    }
 }
 
 
@@ -210,7 +223,7 @@ int main() {
     ios_base::sync_with_stdio(0);
     cin.tie(0); cout.tie(0);
     int tc = 1; 
-    // cin >> tc; // comment out this lnie if only 1 test
+    cin >> tc; // comment out this lnie if only 1 test
     for (int t = 1; t <= tc; t++) {
         solve();
     }

@@ -149,59 +149,98 @@ void blockmax(ll d, ll *x, ll *ans, ll n) {
     }
 }
 
+bool berland(ll n, lm &d, lm &c, ll i) {
+
+    if (d == c) return true;
+
+    for (ll k = 0; k < 4; k++) {
+         
+    }
+
+    cout<<"d:\n";
+    print_lm(d);
+    newline;
+
+    cout<<"c:\n";
+    print_lm(c);
+    newline;
+
+    for (ll ind = i; ind < 4; ind++) {
+        // place in first corner
+        // cout<<"ind: "<<ind<<"\n";
+        // if (d[i] < 0) return false;
+
+        c[(ind+1)%4]++;
+        d[(ind+1)%4]--;
+        if (d[ind] == n) {
+            c[(ind-1+4)%4]++;
+            d[(ind+1)%4]--;
+        }
+        ll result = berland(n, d, c, ind+1);
+
+        if (result) return true;
+
+        if (d[ind] != n) {
+            c[(ind+1)%4]--;
+            c[(ind-1+4)%4]++;
+            d[(ind+1)%4]++;
+            d[(ind-1+4)%4]--;
+
+            result = berland(n, d, c, ind+1);
+
+            if (result) return true;
+
+            if (d[ind] == n-1) {
+                return false;
+            }
+
+            c[(ind+1)%4]++;
+            c[(ind-1+4)%4]--;
+            d[(ind+1)%4]--;
+            d[(ind-1+4)%4]++;
+
+            result = berland(n, d, c, ind+1);
+            if (result) return true;
+
+        } else {
+            return false;
+        }
+    }
+
+
+    return false;
+}
+
 void solve() {
-    // write solution here
-    ll n, q;
+    ll n, u, r, d, l;
+    cin >> n >> u >> r >> d >> l;
 
-    // strengths
-    lv a(n);
-    
-    // prefix sums of lengths
-    lv ps(n);
-
-    // maps the prefix sums to the indices
-    lm ps_map;
-
-    for (ll i = 0; i < n; i++) {
-        cin >> a[i];
-        if (i == 0) {
-            ps_map[a[0]] = 0;
-            ps[0] = a[0];
-        } else {
-            ps[i] = a[i] + ps[i-1];
-            ps_map[a[i] + ps[i-1]] = i;
-        }
+    if (u > n || r > n || d > n || l > n) {
+        cout<<"NO\n";
+        return;
     }
 
-    // attack strengths
-    lv k(q);
-    for (ll i = 0; i < n; i++) {
-        cin >> k[i];
-    }
+    lm de;
+    de[0] = u;
+    de[1] = r;
+    de[2] = d;
+    de[3] = l;
 
-    ll damage_done = 0;
-    ll last_alive = 0;
+    lm c;
+    c[0] = 0;
+    c[1] = 0;
+    c[2] = 0;
+    c[3] = 0;
 
-    ll standing = n;
+    lm rem;
+    rem[0] = u;
+    rem[1] = r;
+    rem[2] = d;
+    rem[3] = l;
 
-    for (ll i = 0; i < q; i++) {
-
-        damage_done += k[i];
-
-        if (damage_done > ps[n-1]) {
-            damage_done = 0;
-            last_alive = 0;
-            standing = n;
-        } else {
-            auto el = *upper_bound(ps_map.begin(), ps_map.end(), damage_done);
-            last_alive = (ll) el.second;
-
-            standing = n - last_alive;
-        }
-
-        cout<<standing<<"\n";
-
-    }
+    bool result = berland(n, de, c, 0);
+    if (result) cout<<"YES\n";
+    else cout<<"NO\n";
 }
 
 
@@ -210,7 +249,7 @@ int main() {
     ios_base::sync_with_stdio(0);
     cin.tie(0); cout.tie(0);
     int tc = 1; 
-    // cin >> tc; // comment out this lnie if only 1 test
+    cin >> tc; // comment out this lnie if only 1 test
     for (int t = 1; t <= tc; t++) {
         solve();
     }

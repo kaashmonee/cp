@@ -145,60 +145,41 @@ void solve() {
     ll n;
     cin >> n;
 
-    // represents size of the array we're searching
-    ll an = n;
-
     ll l = 1;
     ll r = n;
-    ll prev_ind = -1;
-    // cout<<"? "<<l<<" "<<r<<"\n";
-    // cout.flush();
-    // cin >> prev_ind; 
+    ll prev_ind;
+    ll mid = (r-l)/2;
 
-    while (r-l>1) {
-        // l += (r-l)/2;
-        ll leftl, rightl, leftr, rightr;
-        leftl = l;
-        rightl = r - (r-l)/2;
+    cout<<"? "<<l<<" "<<r<<"\n";
+    cout.flush();
+    cin >> prev_ind;
 
-        leftr = rightl + 1;
-        rightr = r;
+    bool b = true;
+
+    while (l < r-1) {
 
         ll ind;
-        cout<<"? "<<l<<" "<<r<<"\n";
+        cout<<"? "<<mid<<" "<<r<<"\n";
         cout.flush();
         cin >> ind;
 
         if (ind == prev_ind) {
-            l = leftl;
-            r = rightl;
+            l = mid;
+            mid = (r-l)/2;
+            b = true;
         } else {
-            if (ind <= rightl) {
-                l = leftl;
-                r = rightl;
-            } else {
-                l = leftr;
-                r = rightr;
-            }
+            r = mid;
+            mid = (r-l)/2;
+            b = false;
         }
         prev_ind = ind;
     }
 
-    if (prev_ind == r) {
-        cout<<"! "<<r<<"\n";
-        cout.flush();
-    } else if (prev_ind == -1) {
-        cout<<"? "<<l<<" "<<r<<"\n";
-        cout.flush();
-        cin >> prev_ind; 
-        if (prev_ind == l) {
-            cout<<"! "<<r<<"\n";
-        } else {
-            cout<<"! "<<l<<"\n";
-        }
+    if (!b) {
+        cout<<"! "<<l<<"\n";
         cout.flush();
     } else {
-        cout<<"! "<<l<<"\n";
+        cout<<"! "<<r<<"\n";
         cout.flush();
     }
 

@@ -149,59 +149,35 @@ void blockmax(ll d, ll *x, ll *ans, ll n) {
     }
 }
 
+ll posmod(ll i, ll n) {
+    return (i % n + n) % n;
+}
+
 void solve() {
     // write solution here
-    ll n, q;
+    ll n;
+    cin >> n;
 
-    // strengths
-    lv a(n);
-    
-    // prefix sums of lengths
-    lv ps(n);
+    ll result[n];
 
-    // maps the prefix sums to the indices
-    lm ps_map;
+    ll start_val = 9 - ((n%10)-1);
 
-    for (ll i = 0; i < n; i++) {
-        cin >> a[i];
-        if (i == 0) {
-            ps_map[a[0]] = 0;
-            ps[0] = a[0];
-        } else {
-            ps[i] = a[i] + ps[i-1];
-            ps_map[a[i] + ps[i-1]] = i;
-        }
-    }
+    cout<<"start_val: "<<start_val<<"\n";
+    ll start = n - ((n%10)-1);
+    cout<<"start: "<<start<<"\n";
 
-    // attack strengths
-    lv k(q);
-    for (ll i = 0; i < n; i++) {
-        cin >> k[i];
-    }
-
-    ll damage_done = 0;
-    ll last_alive = 0;
-
-    ll standing = n;
-
-    for (ll i = 0; i < q; i++) {
-
-        damage_done += k[i];
-
-        if (damage_done > ps[n-1]) {
-            damage_done = 0;
-            last_alive = 0;
-            standing = n;
-        } else {
-            auto el = *upper_bound(ps_map.begin(), ps_map.end(), damage_done);
-            last_alive = (ll) el.second;
-
-            standing = n - last_alive;
-        }
-
-        cout<<standing<<"\n";
+    for (ll i = start; i < start + n; i++) {
+        ll ind = i % n;
+        result[ind] = start_val;
+        start_val++;
+        start_val %= 10;
 
     }
+
+    for (auto k : result) {
+        cout<<k;
+    }
+    cout<<"\n";
 }
 
 
@@ -210,7 +186,7 @@ int main() {
     ios_base::sync_with_stdio(0);
     cin.tie(0); cout.tie(0);
     int tc = 1; 
-    // cin >> tc; // comment out this lnie if only 1 test
+    cin >> tc; // comment out this lnie if only 1 test
     for (int t = 1; t <= tc; t++) {
         solve();
     }

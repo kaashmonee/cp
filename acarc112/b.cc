@@ -149,58 +149,38 @@ void blockmax(ll d, ll *x, ll *ans, ll n) {
     }
 }
 
-void solve() {
-    // write solution here
-    ll n, q;
-
-    // strengths
+lv fib_sums(ll n) {
     lv a(n);
+    lv sums(n);
+
+    a[0] = 1;
+    a[1] = 1;
+    sums[0] = 1;
+    sums[1] = 2;
     
-    // prefix sums of lengths
-    lv ps(n);
-
-    // maps the prefix sums to the indices
-    lm ps_map;
-
-    for (ll i = 0; i < n; i++) {
-        cin >> a[i];
-        if (i == 0) {
-            ps_map[a[0]] = 0;
-            ps[0] = a[0];
-        } else {
-            ps[i] = a[i] + ps[i-1];
-            ps_map[a[i] + ps[i-1]] = i;
-        }
+    for (ll i = 2; i <= n; i++) {
+        a[i] = a[i-1] + a[i-2];
+        sums[i] = sums[i-1] + a[i];
     }
 
-    // attack strengths
-    lv k(q);
-    for (ll i = 0; i < n; i++) {
-        cin >> k[i];
-    }
+    return sums;
+}
 
-    ll damage_done = 0;
-    ll last_alive = 0;
+void solve() {
+    ll b, c;
+    cin >> b >> c;
 
-    ll standing = n;
 
-    for (ll i = 0; i < q; i++) {
-
-        damage_done += k[i];
-
-        if (damage_done > ps[n-1]) {
-            damage_done = 0;
-            last_alive = 0;
-            standing = n;
-        } else {
-            auto el = *upper_bound(ps_map.begin(), ps_map.end(), damage_done);
-            last_alive = (ll) el.second;
-
-            standing = n - last_alive;
-        }
-
-        cout<<standing<<"\n";
-
+    if (b > c) {
+        lv sums = fib_sums(c);
+        ll result = sums[sums.size()-1];
+        cout<<result<<"\n";
+    } else if (b == 0) {
+        cout<<c<<"\n";
+    } else {
+        lv sums = fib_sums(b);
+        ll result = sums[sums.size()-1] + c; 
+        cout<<result<<"\n";
     }
 }
 
