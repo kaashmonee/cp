@@ -149,59 +149,102 @@ void blockmax(ll d, ll *x, ll *ans, ll n) {
     }
 }
 
+
+ll nearest(char c, set<char> &s) {
+    for (char ch : s) {
+        if (ch >= c) {
+            return (ll) (ch - '0');
+        }
+    }
+    return -1;
+}
+
 void solve() {
     // write solution here
-    ll n, q;
+    set<char> valid = set<char>({'0', '1', '2', '5', '8'});
 
-    // strengths
-    lv a(n);
-    
-    // prefix sums of lengths
-    lv ps(n);
+    ll h, m;
+    cin >> h >> m;
 
-    // maps the prefix sums to the indices
-    lm ps_map;
+    // make sure h and m go from 0 to 99
+    h--; m--;
 
-    for (ll i = 0; i < n; i++) {
-        cin >> a[i];
-        if (i == 0) {
-            ps_map[a[0]] = 0;
-            ps[0] = a[0];
-        } else {
-            ps[i] = a[i] + ps[i-1];
-            ps_map[a[i] + ps[i-1]] = i;
-        }
+    string time;
+    cin >> time;
+
+    char fst, snd, thrd, fth;
+
+    fst = time[0]; snd = time[1]; thrd = time[3]; fth = time[4];
+
+    vector<char> times = vector<char>({fst, snd, thrd, fth});
+
+    string result = "";
+
+    ll ctr = 0;
+
+    ll v4, v1, v2, v3;
+    v4 = nearest(times[0], valid);
+    v3 = nearest(times[1], valid);
+    v2 = nearest(times[2], valid);
+    v1 = nearest(times[3], valid);
+
+    if (v1 > m%10 || v1 == -1) {
+        result += "0";
+    } else {
+        result += to_string(v1);
     }
 
-    // attack strengths
-    lv k(q);
-    for (ll i = 0; i < n; i++) {
-        cin >> k[i];
+    // cout<<"result: "<<result<<"\n";
+
+    if (v2 > (m/10)%10 || v2 == -1) {
+        result = "00";
+    } else {
+        result += to_string(v2);
     }
 
-    ll damage_done = 0;
-    ll last_alive = 0;
+    result += ":";
 
-    ll standing = n;
-
-    for (ll i = 0; i < q; i++) {
-
-        damage_done += k[i];
-
-        if (damage_done > ps[n-1]) {
-            damage_done = 0;
-            last_alive = 0;
-            standing = n;
-        } else {
-            auto itup = ps_map.upper_bound(damage_done);
-            last_alive = itup->second;
-
-            standing = n - last_alive;
-        }
-
-        cout<<standing<<"\n";
-
+    if (v3 > (h%10) || v3 == -1) {
+        result = "0:00";
+    } else {
+        result += to_string(v3);
     }
+
+    if (v4 > (h/10)%10 || v4 == -1) {
+        result = "00:00";
+    } else {
+        result += to_string(v4);
+    }
+
+    reverse(result.begin(), result.end());
+
+    cout<<result<<"\n";
+
+
+
+    // for (char i : vector<char>({fst, snd, thrd, fth})) {
+    //     ll lim = i - '0';
+
+    //     if (ctr == 2) result += ":";
+
+    //     if (lim == 0) {
+    //         result += "0";
+    //         continue;
+    //     }
+
+
+    //     ll nearesti = nearest(i, valid) - '0';
+    //     if (nearesti > lim)
+
+
+    //     ctr++;
+
+
+    // }
+
+
+
+
 }
 
 
@@ -210,7 +253,7 @@ int main() {
     ios_base::sync_with_stdio(0);
     cin.tie(0); cout.tie(0);
     int tc = 1; 
-    // cin >> tc; // comment out this lnie if only 1 test
+    cin >> tc; // comment out this lnie if only 1 test
     for (int t = 1; t <= tc; t++) {
         solve();
     }

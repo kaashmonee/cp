@@ -149,59 +149,64 @@ void blockmax(ll d, ll *x, ll *ans, ll n) {
     }
 }
 
-void solve() {
-    // write solution here
-    ll n, q;
-
-    // strengths
-    lv a(n);
+void solve(ll n) {
     
-    // prefix sums of lengths
-    lv ps(n);
-
-    // maps the prefix sums to the indices
-    lm ps_map;
+    lms a;
+    lv av(n);
+    lm inds;
 
     for (ll i = 0; i < n; i++) {
-        cin >> a[i];
-        if (i == 0) {
-            ps_map[a[0]] = 0;
-            ps[0] = a[0];
+        ll x;
+        cin >> x;
+        a.insert(x);
+        av[i] = x;
+        
+        if (inds.find(x) != inds.end()) {
+            if (i > inds[x]) {
+                inds[x] = i;
+            }
         } else {
-            ps[i] = a[i] + ps[i-1];
-            ps_map[a[i] + ps[i-1]] = i;
+            inds[x] = i;
         }
     }
 
-    // attack strengths
-    lv k(q);
-    for (ll i = 0; i < n; i++) {
-        cin >> k[i];
-    }
+    sort(begin(av), end(av));
 
-    ll damage_done = 0;
-    ll last_alive = 0;
+    ll tot = 0;
+    bool inner_done = false;
 
-    ll standing = n;
+    for (ll i = n-1; i >= 0; i--) {
 
-    for (ll i = 0; i < q; i++) {
-
-        damage_done += k[i];
-
-        if (damage_done > ps[n-1]) {
-            damage_done = 0;
-            last_alive = 0;
-            standing = n;
-        } else {
-            auto itup = ps_map.upper_bound(damage_done);
-            last_alive = itup->second;
-
-            standing = n - last_alive;
+        if (inner_done) {
+            inner_done = false;
+            continue;
         }
 
-        cout<<standing<<"\n";
+        for (ll j = 0; j < i; j++) {
 
+            ll x = av[j];
+            ll y = av[i];
+
+            ll diff = y - x;
+
+            if (diff < 0) {
+                inner_done = true;
+                break;
+            }
+            
+            auto it = a.lower_bound(diff);
+            ll num_tris = inds[*it];
+            tot += num_tris;
+
+            if (num_tris == 0) {
+                inner_done = true;
+                break;
+            }
+        }
     }
+
+    cout<<tot-1<<"\n";
+
 }
 
 
@@ -209,12 +214,12 @@ void solve() {
 int main() {
     ios_base::sync_with_stdio(0);
     cin.tie(0); cout.tie(0);
-    int tc = 1; 
-    // cin >> tc; // comment out this lnie if only 1 test
-    for (int t = 1; t <= tc; t++) {
-        solve();
+    while (true) {
+        ll n; 
+        cin >> n;
+        if (n == 0) return 0;
+        solve(n);
     }
-
 }
 
 
