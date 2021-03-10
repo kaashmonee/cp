@@ -149,29 +149,25 @@ void blockmax(ll d, ll *x, ll *ans, ll n) {
     }
 }
 
-
-ll nearest(char c, set<char> &s) {
-    for (char ch : s) {
-        if (ch >= c) {
-            return (ll) (ch - '0');
-        }
-    }
-    return -1;
-}
-
 void solve() {
-    ll h, m;
-    cin >> h >> m;
-
-    string t;
-    cin >> t;
-
-    ll inp_hour = stoi(t.substr(0, 2));
-    ll inp_min = stoi(t.substr(3, 2));
-
-    lm reflections = lm({{0, 0}, {1, 1}, {2, 5}, {5, 2}, {8, 8}});
-
-
+    // write solution here
+    ll n;
+    cin >> n;
+    ll ctr = 0;
+    while (n != 1) {
+        auto pfs = generate_prime_factors(n);
+        cout<<"n: "<<n<<"\n";
+        cout<<"ctr: "<<ctr<<"\n";
+        print_lm(pfs);
+        newline;
+        if (pfs.size() == 1 && pfs.begin()->first == n) {
+            n--;
+        } else {
+            n = pfs.begin()->first;
+        }
+        ctr++;
+    }
+    cout<<ctr<<"\n";
 }
 
 

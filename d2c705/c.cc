@@ -149,27 +149,55 @@ void blockmax(ll d, ll *x, ll *ans, ll n) {
     }
 }
 
-
-ll nearest(char c, set<char> &s) {
-    for (char ch : s) {
-        if (ch >= c) {
-            return (ll) (ch - '0');
-        }
-    }
-    return -1;
+// just have to write this function
+bool suff(string s, ll ind, vector<vector<ll>> &dat) {
+    return true;
 }
 
 void solve() {
-    ll h, m;
-    cin >> h >> m;
+    // write solution here
+    ll n, k;
+    cin >> n >> k;
 
-    string t;
-    cin >> t;
+    string s;
+    cin >> s;
 
-    ll inp_hour = stoi(t.substr(0, 2));
-    ll inp_min = stoi(t.substr(3, 2));
+    if (n % k != 0) {
+        cout<<-1<<"\n";
+        return;
+    }
 
-    lm reflections = lm({{0, 0}, {1, 1}, {2, 5}, {5, 2}, {8, 8}});
+    // contains the prefix counts of each letter in the string 
+    // up until a particular index
+    vector<vector<ll>> dat(26, vector<ll>(n, 0));
+
+    for (ll i = 0; i < n; i++) {
+        ll c = (ll) s[i] - 'a';
+        for (ll j = 1; j < 26; j++) {
+            dat[i][j] = dat[i][j-1];
+        }
+        dat[i][c]++;
+    }
+
+    // represents the start of the suffix
+    // since we're binary searching, we start it at n/2
+    ll start, end, mid;
+    start = 0; 
+    end = n;
+    mid = n/2;
+
+    while (start < end-1) {
+
+        bool works = suff(s, mid, dat);
+        
+        if (works) {
+            mid += mid/2;
+            start = mid;
+        } else {
+            mid -= mid/2;
+            end = mid;
+        }
+    }
 
 
 }

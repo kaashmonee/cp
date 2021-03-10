@@ -149,29 +149,47 @@ void blockmax(ll d, ll *x, ll *ans, ll n) {
     }
 }
 
-
-ll nearest(char c, set<char> &s) {
-    for (char ch : s) {
-        if (ch >= c) {
-            return (ll) (ch - '0');
-        }
-    }
-    return -1;
-}
-
 void solve() {
-    ll h, m;
-    cin >> h >> m;
+    // write solution here
+    ll n, q;
+    cin >> n >> q;
 
-    string t;
-    cin >> t;
+    string s;
+    cin >> s;
 
-    ll inp_hour = stoi(t.substr(0, 2));
-    ll inp_min = stoi(t.substr(3, 2));
+    lv zp(n+1, 0);
+    lv op(n+1, 0);
 
-    lm reflections = lm({{0, 0}, {1, 1}, {2, 5}, {5, 2}, {8, 8}});
+    for (ll i = 1; i <= n; i++) {
+        if (s[i-1] == '0') {
+            op[i] = op[i-1]+1;
+            zp[i] = zp[i-1];
+        } else {
+            op[i] = op[i-1];
+            zp[i] = zp[i-1]+1;
+        }
 
+    }
 
+    while (q--) {
+        ll l, r;
+        cin >> l >> r;
+
+        ll numz = 0, numo = 0;
+        numz = zp[r] - zp[l-1];
+        numo = op[r] - op[l-1];
+
+        for (ll k = 2; k <= n-1; k++) {
+            ll lefto = op[k-1];
+            ll righto = op[k+1] - op[k];
+
+            ll leftz = zp[k-1];
+            ll rightz = zp[k+1] - zp[k];
+
+            if ()
+        }
+
+    }
 }
 
 

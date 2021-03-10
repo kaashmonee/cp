@@ -149,28 +149,38 @@ void blockmax(ll d, ll *x, ll *ans, ll n) {
     }
 }
 
-
-ll nearest(char c, set<char> &s) {
-    for (char ch : s) {
-        if (ch >= c) {
-            return (ll) (ch - '0');
-        }
-    }
-    return -1;
-}
-
 void solve() {
-    ll h, m;
-    cin >> h >> m;
+    ll n;
+    cin >> n;
+    lv a(n);
+    lv b(n);
 
-    string t;
-    cin >> t;
+    for (ll i = 0; i < n; i++) {
+        cin >> a[i];
+    }
 
-    ll inp_hour = stoi(t.substr(0, 2));
-    ll inp_min = stoi(t.substr(3, 2));
+    for (ll i = 0; i < n; i++) {
+        cin >> b[i];
+    }
 
-    lm reflections = lm({{0, 0}, {1, 1}, {2, 5}, {5, 2}, {8, 8}});
+    lv c(n);
+    for (ll i = 0; i < n; i++) {
+        c[i] = a[i] - b[i];
+    }
 
+    sort(begin(c), end(c));
+
+    ll tot = 0;
+
+    for (ll i = 0; i < n; i++) {
+        if (c[i] < 0) continue;
+
+        ll next = -c[i]+1;
+        auto it = lower_bound(begin(c), begin(c)+i, next);
+        ll d = distance(it, begin(c)+i);
+        tot += d;
+    }
+    cout<<tot<<"\n";
 
 }
 
@@ -180,7 +190,7 @@ int main() {
     ios_base::sync_with_stdio(0);
     cin.tie(0); cout.tie(0);
     int tc = 1; 
-    cin >> tc; // comment out this lnie if only 1 test
+    // cin >> tc; // comment out this lnie if only 1 test
     for (int t = 1; t <= tc; t++) {
         solve();
     }

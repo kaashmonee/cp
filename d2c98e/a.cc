@@ -149,29 +149,21 @@ void blockmax(ll d, ll *x, ll *ans, ll n) {
     }
 }
 
-
-ll nearest(char c, set<char> &s) {
-    for (char ch : s) {
-        if (ch >= c) {
-            return (ll) (ch - '0');
-        }
-    }
-    return -1;
-}
-
 void solve() {
-    ll h, m;
-    cin >> h >> m;
+    ll x, y;
+    cin >> x >> y;
 
-    string t;
-    cin >> t;
+    ll mi = min({x, y});
+    ll ma = max({x, y});
 
-    ll inp_hour = stoi(t.substr(0, 2));
-    ll inp_min = stoi(t.substr(3, 2));
+    if (ma == mi) {
+        cout<<2*mi<<"\n";
+        return;
+    }
 
-    lm reflections = lm({{0, 0}, {1, 1}, {2, 5}, {5, 2}, {8, 8}});
+    ll result = 2 * mi + 2*ma-2*mi-1;
 
-
+    cout<<result<<"\n";
 }
 
 

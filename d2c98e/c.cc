@@ -150,28 +150,39 @@ void blockmax(ll d, ll *x, ll *ans, ll n) {
 }
 
 
-ll nearest(char c, set<char> &s) {
-    for (char ch : s) {
-        if (ch >= c) {
-            return (ll) (ch - '0');
-        }
-    }
-    return -1;
-}
 
 void solve() {
-    ll h, m;
-    cin >> h >> m;
+    string s;
+    cin >> s;
 
-    string t;
-    cin >> t;
+    ll bctr = 0, pctr = 0;
 
-    ll inp_hour = stoi(t.substr(0, 2));
-    ll inp_min = stoi(t.substr(3, 2));
+    ll num_rbs = 0;
 
-    lm reflections = lm({{0, 0}, {1, 1}, {2, 5}, {5, 2}, {8, 8}});
+    for (char c : s) {
+        if (c == '(') pctr++;
+        else if (c == '[') bctr++;
 
+        else if (c == ')') {
+            if (pctr > 0) {
+                num_rbs++;
+                pctr--;
+            } else {
+                pctr = 0;
+            }
+        } 
+        else if (c == ']') {
+            if (bctr > 0) {
+                num_rbs++;
+                bctr--;
+            } else {
+                bctr = 0;
+            }
+        }
 
+    }
+
+    cout<<num_rbs<<"\n";
 }
 
 
