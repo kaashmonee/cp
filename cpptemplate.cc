@@ -129,6 +129,12 @@ ll modpow(ll x, ll n, ll m) {
     return u;
 }
 
+// computes the sum of consecutive integers from m to n
+// to understand this formula, see:
+// https://math.stackexchange.com/questions/1100897/sum-of-consecutive-numbers
+ll consec_sum(ll m, ll n) {
+    return n*(n+1)/2 - (m-1)*(m)/2;
+}
 
 void blockmax(ll d, ll *x, ll *ans, ll n) {
     // d is the block size

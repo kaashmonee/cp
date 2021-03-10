@@ -155,8 +155,21 @@ void blockmax(ll d, ll *x, ll *ans, ll n) {
 //     cout<<"hello\n";
 // }
 
+// computes the sum of consecutive integers from m to n
+// to understand this formula, see:
+// https://math.stackexchange.com/questions/1100897/sum-of-consecutive-numbers
+ll consec_sum(ll m, ll n) {
+    return n*(n+1)/2 - (m-1)*(m)/2;
+}
+
+// returns the number of cards that will 
+// be required for a pyramid of height h
+ll num_cards(ll h) {
+    return consec_sum(1, h) + consec_sum(1, h-1);
+}
+
 void solve() {
-    // write solution here
+
 }
 
 
