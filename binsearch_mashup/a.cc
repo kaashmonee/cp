@@ -1,4 +1,5 @@
 #include <bits/stdc++.h>
+#include <boost/range/irange.hpp>
 
 using namespace std;
 
@@ -148,6 +149,11 @@ void blockmax(ll d, ll *x, ll *ans, ll n) {
         }
     }
 }
+
+// Range based for loop example, might be a nice shorthand
+// for (ll i : boost::irange(0, 100)) {
+//     cout<<"hello\n";
+// }
 
 void solve() {
     // write solution here
