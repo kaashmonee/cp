@@ -1,5 +1,4 @@
 #include <bits/stdc++.h>
-#include <boost/range/irange.hpp>
 
 using namespace std;
 
@@ -165,10 +164,53 @@ ll consec_sum(ll m, ll n) {
 // returns the number of cards that will 
 // be required for a pyramid of height h
 ll num_cards(ll h) {
-    return consec_sum(1, h) + consec_sum(1, h-1);
+    return 2*consec_sum(1, h) + consec_sum(1, h-1);
+}
+
+ll build_tower(ll n) {
+    ll min_height = 1;
+    ll max_height = sqrt(2*n);
+    ll mid_height = (max_height+min_height)/2;
+
+    // printf("min: %lld\n", min_height);
+    // printf("mid: %lld\n", mid_height);
+    // printf("max: %lld\n", max_height);
+    ll cards = num_cards(mid_height);
+
+    while (min_height < max_height-1) {
+        cards = num_cards(mid_height);
+        if (cards == n) {
+            return cards;
+        } else if (cards < n) {
+            min_height = mid_height;
+        } else {
+            max_height = mid_height;
+        }
+        mid_height = (max_height+min_height)/2;
+        // printf("min: %lld\n", min_height);
+        // printf("mid: %lld\n", mid_height);
+        // printf("max: %lld\n", max_height);
+        // printf("cards: %lld\n", cards);
+    }
+
+    return num_cards(min_height);
+
 }
 
 void solve() {
+
+    ll n;
+    cin >> n;
+
+    ll towers = 0;
+
+    while (n > 1) {
+        ll cards_used = build_tower(n);
+        n -= cards_used;
+        towers++;
+    }
+
+    cout<<towers<<"\n";
 
 }
 
