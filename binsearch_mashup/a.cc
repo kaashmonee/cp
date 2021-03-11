@@ -172,9 +172,6 @@ ll build_tower(ll n) {
     ll max_height = sqrt(2*n);
     ll mid_height = (max_height+min_height)/2;
 
-    // printf("min: %lld\n", min_height);
-    // printf("mid: %lld\n", mid_height);
-    // printf("max: %lld\n", max_height);
     ll cards = num_cards(mid_height);
 
     while (min_height < max_height-1) {
@@ -187,10 +184,6 @@ ll build_tower(ll n) {
             max_height = mid_height;
         }
         mid_height = (max_height+min_height)/2;
-        // printf("min: %lld\n", min_height);
-        // printf("mid: %lld\n", mid_height);
-        // printf("max: %lld\n", max_height);
-        // printf("cards: %lld\n", cards);
     }
 
     return num_cards(min_height);
