@@ -155,6 +155,16 @@ void blockmax(ll d, ll *x, ll *ans, ll n) {
     }
 }
 
+// just some helper functions so we dont' have to keep re-writing this over
+// and over again...
+ll get_max_ind(lv &a) {
+    return distance(begin(a), max_element(begin(a), end(a)));
+}
+
+ll get_max_val(lv &a) {
+    return a[get_max_ind(a)];
+}
+
 void solve() {
     // write solution here
 }

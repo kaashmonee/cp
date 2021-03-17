@@ -112,6 +112,16 @@ void print_lm(lm m) {
     newline;
 }
 
+// just some helper functions so we dont' have to keep re-writing this over
+// and over again...
+ll get_max_ind(lv &a) {
+    return distance(begin(a), max_element(begin(a), end(a)));
+}
+
+ll get_max_val(lv &a) {
+    return a[get_max_ind(a)];
+}
+
 // modular exponent function taken from:
 // CP handbook
 ll modpow(ll x, ll n, ll m) {
@@ -155,59 +165,33 @@ void blockmax(ll d, ll *x, ll *ans, ll n) {
     }
 }
 
-
-ll ks(ll n, ll b, lv &a, ll spent, lv &sack, ll size) {
-
-    if (spent > b) return size;
-
-    ll max_result = 0;
-
-    for (ll i = 0; i < n; i++) {
-        if (!sack[i]) {
-            sack[i] = 1;
-            spent += a[i];
-            size++;
-            ll result = ks(n, b, a, spent, sack, size);
-            if (spent > b) {
-                spent -= a[i];
-                sack[i] = 0;
-                size--;
-            } 
-
-            if (result > max_result) max_result = result;
-
-        }
-    }
-
-    return max_result;
-
-}
-
-
-
-
 void solve() {
     // write solution here
-    ll n, b;
-    cin >> n >> b;
+    ll n, k, p;
+    cin >> n >> k >> p;
 
-    lv a(n);
-
-    for (ll i = 0; i < n; i++) {cin >> a[i];}
-
-    sort(begin(a), end(a));
-
-    ll bought = 0;
-
-    for (ll i=0; i<n; i++) {
-        if (b >= a[i]) {
-            b -= a[i];
-            bought++;
+    vector<vector<long long>>a(n, vector<long long>(k));
+    for (ll i = 0; i < n; i++) {
+        for (ll j = k-1; j >= 0; j--) {
+            cin >> a[i][j];
         }
     }
 
+    ll beauty = 0;
 
-    cout<<bought<<"\n"; 
+    while (p > 0) {
+        lv stack_top(n, 0);
+        for (ll i = 0; i < n; i++) {
+            if (a[i].size() > 0)
+                stack_top[i] = a[i][a[i].size()-1];
+        }
+        auto pick = distance(begin(stack_top), max_element(begin(stack_top), end(stack_top)));
+        beauty += stack_top[pick];
+        a[pick].pop_back();
+        p--;
+    }
+
+    cout<<beauty<<"\n";
 
 }
 
